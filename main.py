@@ -7,9 +7,6 @@ import os
 from bot.utils.launcher import process
 
 
-async def main():
-    await process()
-
 # Имитация простого веб-сервера для Render
 async def handle(request):
     return web.Response(text="Bot is running")
@@ -23,6 +20,12 @@ async def start_server():
     site = web.TCPSite(runner, '0.0.0.0', port)
     await site.start()
     print(f"Serving on port {port}")
+
+async def main():
+    await asyncio.gather(
+        process(),       # Основная логика бота
+        start_server()   # Запуск веб-сервера для Render
+    )
 
 if __name__ == '__main__':
     with suppress(KeyboardInterrupt, RuntimeError, RuntimeWarning):
